@@ -168,6 +168,26 @@ public class JellyfinDbContext(DbContextOptions<JellyfinDbContext> options, ILog
     /// </summary>
     public DbSet<KeyframeData> KeyframeData => Set<KeyframeData>();
 
+    /// <summary>
+    /// Gets the <see cref="DbSet{TEntity}"/> containing media requests.
+    /// </summary>
+    public DbSet<MediaRequest> MediaRequests => Set<MediaRequest>();
+
+    /// <summary>
+    /// Gets the <see cref="DbSet{TEntity}"/> containing season requests.
+    /// </summary>
+    public DbSet<SeasonRequest> SeasonRequests => Set<SeasonRequest>();
+
+    /// <summary>
+    /// Gets the <see cref="DbSet{TEntity}"/> containing request status history.
+    /// </summary>
+    public DbSet<RequestStatus> RequestStatuses => Set<RequestStatus>();
+
+    /// <summary>
+    /// Gets the <see cref="DbSet{TEntity}"/> containing *Arr instances.
+    /// </summary>
+    public DbSet<ArrInstance> ArrInstances => Set<ArrInstance>();
+
     /*public DbSet<Artwork> Artwork => Set<Artwork>();
 
     public DbSet<Book> Books => Set<Book>();
