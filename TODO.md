@@ -33,7 +33,7 @@
 
 ## UI/UX
 - [ ] Design screens for Discover, Search, Requests, and Admin settings using Jellyfin theming
-- [ ] Add request buttons to item detail pages
+- [x] Add request buttons to item detail pages
 - [ ] Provide responsive layouts and accessibility
 - [ ] Implement notifications or indicators for pending requests
 - [ ] Add profile page for personal request history and quotas

@@ -34,6 +34,7 @@ import { getPortraitShape, getSquareShape } from 'utils/card';
 import Dashboard from 'utils/dashboard';
 import Events from 'utils/events';
 import { getItemBackdropImageUrl } from 'utils/jellyfin-apiclient/backdropImage';
+import toast from 'components/toast/toast';
 
 import 'elements/emby-itemscontainer/emby-itemscontainer';
 import 'elements/emby-checkbox/emby-checkbox';
@@ -653,6 +654,9 @@ function reloadFromItem(instance, page, params, item, user) {
 
     if (item.Type === 'Book' && item.CanDownload && appHost.supports(AppFeature.FileDownload)) {
         hideAll(page, 'btnDownload', true);
+    }
+    if (item.Type === 'Movie' || item.Type === 'Series') {
+        hideAll(page, 'btnRequest', true);
     }
 
     autoFocus(page);
@@ -2023,6 +2027,20 @@ export default function (view, params) {
             filename: currentItem.Path.replace(/^.*[\\/]/, '')
         }]);
     }
+    function onRequestClick() {
+        const apiClient = getApiClient();
+        apiClient.ajax({
+            type: 'POST',
+            url: apiClient.getUrl('Requests'),
+            contentType: 'application/json',
+            data: JSON.stringify({ mediaId: currentItem.Id, mediaType: currentItem.Type.toLowerCase() })
+        }).then(() => {
+            toast('Request submitted');
+        }).catch((err) => {
+            console.error('Request failed', err);
+            toast('Request failed');
+        });
+    }
 
     function onMoreCommandsClick() {
         const button = this;
@@ -2090,6 +2108,7 @@ export default function (view, params) {
         bindAll(view, '.btnCancelSeriesTimer', 'click', onCancelSeriesTimerClick);
         bindAll(view, '.btnCancelTimer', 'click', onCancelTimerClick);
         bindAll(view, '.btnDownload', 'click', onDownloadClick);
+        bindAll(view, '.btnRequest', 'click', onRequestClick);
         view.querySelector('.trackSelections').addEventListener('submit', onTrackSelectionsSubmit);
         view.querySelector('.btnSplitVersions').addEventListener('click', function () {
             splitVersions(self, view, apiClient, params);
