@@ -1,3 +1,4 @@
+
 export enum MediaRequestStatus {
     PENDING = 1,
     APPROVED,
@@ -36,4 +37,3 @@ export interface MediaRequest {
     is4k: boolean;
     createdAt: string;
     seasons?: SeasonRequest[];
-}

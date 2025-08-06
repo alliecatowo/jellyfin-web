@@ -2,6 +2,7 @@
 
 ## Completed
 - [x] Bootstrap migration skeleton
+- [x] Port media request enums, types, and override hook
 
 ## Data Model & Storage
 - [ ] Merge Jellyseerr request entities into Jellyfin database
