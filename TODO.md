@@ -1,6 +1,7 @@
 # TODO
 
 - [x] Bootstrap migration skeleton
+- [x] Scaffold Discover feature placeholders
 - [ ] Merge Jellyseerr database schema into Jellyfin
 - [ ] Port Jellyseerr API endpoints to Jellyfin
 - [ ] Integrate Discover UI into Jellyfin web client
@@ -8,4 +9,3 @@
 - [ ] Port notifications and scheduled tasks
 - [ ] Write migration guide
 - [ ] Add unit and integration tests
-
