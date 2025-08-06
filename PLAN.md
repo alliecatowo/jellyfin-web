@@ -1,14 +1,25 @@
 # Jellyseer-in-Jellyfin Migration Plan
 
-This document captures the high-level vision and scope for integrating Jellyseerr's discovery and request features directly into Jellyfin.
+This document defines the long-term vision for folding Jellyseerr's discovery and request system into Jellyfin.
 
 ## Vision
-- Provide a native discovery and request workflow in Jellyfin.
-- Achieve feature parity with standalone Jellyseerr while leveraging Jellyfin's existing infrastructure.
+- Provide a native discovery and media request workflow in Jellyfin.
+- Maintain feature parity with standalone Jellyseerr and add polish through Jellyfin's ecosystem.
 
 ## Scope
-- **Backend**: merge Jellyseerr database schema, APIs, authentication, jobs, and notifications into Jellyfin's server stack.
-- **Frontend**: add a Discover tab to the web client offering trending, popular, recommendations, watchlists and request management.
-- **Compatibility**: optional Overseerr API shim and cross-platform notifications.
+### User Interface
+- Integrate a `Discover` tab in the web SPA with trending, popular, recommendations, watchlists and request management.
+### Backend
+- Port Jellyseerr's Prisma schema into Jellyfin's Entity Framework model.
+- Expose request and discovery APIs within Jellyfin's existing API namespace.
+- Rework notifications, job queues and authentication to use Jellyfin services.
 
-This file is immutable; revisions must be recorded via additional documentation (e.g., ADRs).
+## Phases
+1. Schema merge
+2. API port
+3. Front-end integration
+4. Auth & ACL
+5. Notifications & job queue
+6. Cleanup and removal of legacy Jellyseerr runtime
+
+This file is immutable; revisions must be captured via supplementary documents such as ADRs.
