@@ -1,33 +1,58 @@
 # Plan
 
-## Task: Merge Jellyseerr request entities into Jellyfin database
+This document describes the complete migration path to integrate Jellyseerr-style discovery and request capabilities into Jellyfin. It is an immutable high-level blueprint; individual tasks are tracked in TODO.md.
 
-### Step 1: Review Jellyseerr entities
-- Inspect `jellyseerr/server/entity/MediaRequest.ts` and `SeasonRequest.ts` to identify important fields and relationships.
+## 1. Data Model & Storage
+- Introduce enums for request states and media types.
+- Define entities: MediaRequest, SeasonRequest, ArrInstance, and request status history if needed.
+- Map entities with EF Core configuration, including indexes for media, user, and status lookups.
+- Create migrations to add tables for requests, season requests, arr instances, and supporting indexes.
 
-### Step 2: Add enums used by request entities
-- File: `jellyfin-server/Jellyfin.Data/Enums/MediaRequestStatus.cs`
-- Define `MediaRequestStatus` enum with values `Pending`, `Approved`, `Declined`, `Failed`, `Completed`.
-- File: `jellyfin-server/Jellyfin.Data/Enums/MediaRequestType.cs`
-- Define `MediaRequestType` enum with values `Movie` and `Tv`.
+## 2. Backend API
+- Port Jellyseerr REST endpoints for submitting requests, approvals, history, and settings.
+- Implement service layer that communicates with Radarr, Sonarr, Lidarr, and Readarr.
+- Add authentication and permission checks.
+- Expose admin endpoints for request queue management and configuration.
+- Provide WebSocket push updates for realtime request changes.
 
-### Step 3: Create `SeasonRequest` entity
-- File: `jellyfin-server/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/SeasonRequest.cs`
-- Properties: `Id`, `SeasonNumber`, `Status` (`MediaRequestStatus`), `MediaRequestId`, `MediaRequest` navigation, `CreatedAt`, `UpdatedAt`.
-- Implement `IHasConcurrencyToken` like other entities and include XML documentation.
+## 3. *Arr Integration
+- Build reusable connectors for each *Arr application with unit tests.
+- Support multiple servers and quality/root folder profile mapping.
+- Handle asynchronous job submission, retries, and error reporting.
 
-### Step 4: Create `MediaRequest` entity
-- File: `jellyfin-server/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/MediaRequest.cs`
-- Properties: `Id`, `RequestedByUserId`, `RequestedBy` navigation (`User`), `TmdbId`, `TvdbId` (nullable), `MediaType` (`MediaRequestType`), `Is4K`, `Status` (`MediaRequestStatus`), `CreatedAt`, `UpdatedAt`, `SeasonRequests` collection.
-- Implement `IHasConcurrencyToken` and XML documentation similar to existing entities.
+## 4. Request Workflow
+- Provide search and discovery endpoints leveraging Jellyfin metadata.
+- Implement request creation with auto-approval logic and manual review capabilities.
+- Integrate availability checks to prevent duplicate requests.
+- Track download progress and update request status as items are imported.
+- Allow admins to edit or override requests.
 
-### Step 5: Register entities in `JellyfinDbContext`
-- File: `jellyfin-server/src/Jellyfin.Database/Jellyfin.Database.Implementations/JellyfinDbContext.cs`
-- Add `DbSet<MediaRequest>` and `DbSet<SeasonRequest>` properties.
+## 5. UI/UX
+- Add Discover and Search screens using Jellyfin theming.
+- Show request buttons on item detail pages and indicators for request states.
+- Provide profile pages for request history and quotas.
+- Ensure responsive layouts and accessibility.
+- Surface notifications for request lifecycle events.
 
-### Step 6: Build
-- Run `dotnet build jellyfin-server/Jellyfin.sln` to ensure the solution compiles with the new entities.
+## 6. Users & Permissions
+- Map Jellyfin users to request profiles.
+- Implement per-user permissions, quotas, and default quality profiles.
+- Support guest access when enabled.
+- Provide admin roles for managing requests and settings.
 
-### Step 7: Commit
-- Commit all new and modified files with message `feat(data): add media request entities`.
+## 7. Notifications & Automation
+- Port notification providers (Email, Discord, Telegram, Webhook, etc.).
+- Add scheduled jobs to sync request status and library availability.
+- Support customizable notification templates and failure alerts.
 
+## 8. Documentation & Migration
+- Document *Arr integration and configuration steps.
+- Provide migration guides from Jellyseerr.
+- Add admin UI wizard for *Arr setup.
+- Record known limitations and future enhancements.
+
+## 9. Testing & QA
+- Unit tests for API endpoints, connectors, and permissions.
+- Integration tests covering request workflow.
+- End-to-end UI tests for major flows.
+- Load tests for high request volume.
