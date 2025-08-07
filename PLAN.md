@@ -64,3 +64,9 @@ scope or tasks live in `TODO.md`.
 2. Integration tests for request workflows and *Arr communication.
 3. End‑to‑end tests for major UI flows.
 4. Load tests to validate high request volume scenarios.
+
+## Task: Create EF Core migrations
+1. Install .NET 9 SDK and the `dotnet-ef` tool.
+2. Run `dotnet ef migrations add AddRequestTables` targeting the SQLite provider project.
+3. Verify that the generated migration creates `ArrInstances`, `MediaRequests`, `RequestStatuses`, and `SeasonRequests` tables.
+4. Build the provider project to ensure the migration compiles.
