@@ -7,7 +7,7 @@
 ## Data Model & Storage
 - [x] Merge Jellyseerr request entities into Jellyfin database
 - [x] Add tables for media requests, request status, and *arr instances
-- [ ] Create EF Core migrations
+- [x] Create EF Core migrations
 - [ ] Add indexes for lookups by media, user, and status
 
 ## Backend API
